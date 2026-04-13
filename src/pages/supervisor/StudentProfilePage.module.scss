@@ -1,0 +1,77 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.infoCard {
+  @include card-base;
+  padding: $space-6;
+  margin-bottom: $space-8;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: $space-5;
+}
+
+.infoItem { display: flex; flex-direction: column; gap: $space-1; }
+.infoLabel { font-size: $font-size-xs; color: $gray-400; text-transform: uppercase; letter-spacing: 0.06em; font-weight: $font-weight-semibold; }
+.infoValue { font-size: $font-size-sm; color: $gray-700; font-weight: $font-weight-medium; }
+.infoLink  { font-size: $font-size-sm; color: $primary-dark; font-weight: $font-weight-medium; &:hover { text-decoration: underline; } }
+
+.termsSection { margin-top: $space-4; }
+.termsSectionHeader { @include flex-between; margin-bottom: $space-4; }
+.sectionTitle { font-size: $font-size-xl; font-weight: $font-weight-semibold; color: $gray-800; }
+
+.noTerms {
+  @include card-base;
+  padding: $space-12;
+  @include flex-center;
+  flex-direction: column;
+  gap: $space-4;
+  color: $gray-500;
+}
+
+.termsList { display: flex; flex-direction: column; gap: $space-3; }
+
+.termCard {
+  @include card-base;
+  padding: $space-5;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover { box-shadow: $shadow-md; border-color: $primary-light; transform: translateX(3px); }
+
+  &.termCardCurrent { border-left: 3px solid $primary; }
+}
+
+.termCardTop { @include flex-between; margin-bottom: $space-2; }
+.termCardLeft { display: flex; align-items: center; gap: $space-3; }
+.termNum { font-size: $font-size-base; font-weight: $font-weight-semibold; color: $gray-800; }
+.termProgress { font-size: $font-size-xs; color: $gray-500; }
+
+.termCardMeta {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-xs;
+  color: $gray-500;
+  margin-bottom: $space-3;
+  flex-wrap: wrap;
+}
+
+.progressBar {
+  height: 4px;
+  background: $gray-100;
+  border-radius: $radius-full;
+  overflow: hidden;
+  margin-bottom: $space-2;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $primary, $accent);
+  border-radius: $radius-full;
+  transition: width $transition-slow;
+}
+
+.termDates { font-size: $font-size-xs; color: $gray-400; }

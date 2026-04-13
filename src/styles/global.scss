@@ -1,0 +1,75 @@
+@use 'reset';
+@use 'variables' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  color: $gray-700;
+  background-color: $bg;
+  line-height: $line-height-normal;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  padding-top: $navbar-height;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $space-6;
+}
+
+.page-content {
+  padding: $space-8 $space-6;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Utility classes
+.text-xs { font-size: $font-size-xs; }
+.text-sm { font-size: $font-size-sm; }
+.text-lg { font-size: $font-size-lg; }
+.text-xl { font-size: $font-size-xl; }
+.text-2xl { font-size: $font-size-2xl; }
+
+.font-medium { font-weight: $font-weight-medium; }
+.font-semibold { font-weight: $font-weight-semibold; }
+.font-bold { font-weight: $font-weight-bold; }
+
+.text-muted { color: $gray-500; }
+.text-primary { color: $primary-dark; }
+.text-success { color: $success; }
+.text-danger { color: $danger; }
+
+.mt-4 { margin-top: $space-4; }
+.mt-6 { margin-top: $space-6; }
+.mt-8 { margin-top: $space-8; }
+.mb-4 { margin-bottom: $space-4; }
+.mb-6 { margin-bottom: $space-6; }
+
+.gap-2 { gap: $space-2; }
+.gap-4 { gap: $space-4; }
+
+.w-full { width: 100%; }
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in { animation: fadeIn $transition-base both; }
+.animate-scale-in { animation: scaleIn $transition-fast both; }

@@ -1,0 +1,88 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.infoCard {
+  @include card-base;
+  display: flex;
+  align-items: center;
+  gap: $space-6;
+  padding: $space-8;
+  margin-bottom: $space-8;
+  background: linear-gradient(135deg, $primary-lighter, $white);
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, $primary, $accent);
+  border-radius: $radius-full;
+  @include flex-center;
+  color: $white;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  flex-shrink: 0;
+}
+
+.infoText { flex: 1; }
+.name { font-size: $font-size-2xl; font-weight: $font-weight-bold; color: $gray-800; }
+.sub  { font-size: $font-size-sm; color: $gray-500; margin-top: $space-1; }
+
+.chips { display: flex; align-items: center; gap: $space-3; margin-top: $space-4; flex-wrap: wrap; }
+.chip {
+  display: flex; align-items: center; gap: $space-2;
+  font-size: $font-size-sm; color: $gray-600;
+  background: $white; padding: $space-2 $space-3;
+  border-radius: $radius-full; border: 1px solid $border;
+}
+.linkChip {
+  font-size: $font-size-sm; color: $primary-dark;
+  background: $primary-lighter; padding: $space-2 $space-3;
+  border-radius: $radius-full; transition: background $transition-fast;
+  &:hover { background: $primary-light; }
+}
+
+.sectionHeader { @include flex-between; margin-bottom: $space-4; }
+.sectionTitle  { font-size: $font-size-xl; font-weight: $font-weight-semibold; color: $gray-800; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: $space-4; }
+.list { display: flex; flex-direction: column; gap: $space-2; }
+
+.sCard {
+  @include card-base;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $space-2;
+  cursor: pointer;
+  transition: all $transition-base;
+  &:hover { box-shadow: $shadow-lg; transform: translateY(-3px); border-color: $primary-light; }
+}
+
+.sAvatar {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, $success, $primary);
+  border-radius: $radius-full;
+  @include flex-center; color: $white; font-weight: $font-weight-bold;
+  margin-bottom: $space-2;
+}
+.sAvatarSm {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, $success, $primary);
+  border-radius: $radius-full;
+  @include flex-center; color: $white; font-size: $font-size-sm; font-weight: $font-weight-bold; flex-shrink: 0;
+}
+
+.sName { font-size: $font-size-sm; font-weight: $font-weight-semibold; color: $gray-800; }
+.sMeta { font-size: $font-size-xs; color: $gray-500; }
+.sDays { font-size: $font-size-xs; color: $gray-400; }
+
+.sListItem {
+  @include card-base;
+  display: flex; align-items: center; gap: $space-4;
+  padding: $space-4 $space-5; cursor: pointer;
+  transition: all $transition-base; color: $gray-400;
+  &:hover { box-shadow: $shadow-md; border-color: $primary-light; transform: translateX(3px); }
+}
+.sListInfo { flex: 1; display: flex; flex-direction: column; gap: 2px; }

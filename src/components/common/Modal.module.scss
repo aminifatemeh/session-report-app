@@ -1,0 +1,83 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba($gray-800, 0.5);
+  backdrop-filter: blur(3px);
+  @include flex-center;
+  z-index: 1000;
+  padding: $space-4;
+  animation: fadeOverlay $transition-fast both;
+}
+
+@keyframes fadeOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal {
+  background: $surface;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-xl;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  animation: scaleIn $transition-base both;
+  width: 100%;
+
+  &.sm  { max-width: 420px; }
+  &.md  { max-width: 560px; }
+  &.lg  { max-width: 720px; }
+  &.xl  { max-width: 900px; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95) translateY(-8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.header {
+  @include flex-between;
+  padding: $space-6;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $gray-800;
+}
+
+.closeBtn {
+  @include flex-center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: $gray-100;
+  border-radius: $radius-md;
+  color: $gray-500;
+  cursor: pointer;
+  transition: all $transition-fast;
+  flex-shrink: 0;
+
+  &:hover { background: $gray-200; color: $gray-700; }
+}
+
+.body {
+  padding: $space-6;
+  overflow-y: auto;
+  flex: 1;
+  @include custom-scrollbar;
+}
+
+.footer {
+  padding: $space-4 $space-6;
+  border-top: 1px solid $border;
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-3;
+  flex-shrink: 0;
+}

@@ -1,0 +1,8 @@
+// ============================================================
+// MAIN ENTRY — imports must stay in this order
+// ============================================================
+
+@use 'variables';
+@use 'reset';
+@use 'typography';
+// mixins are @use'd directly in component SCSS files

@@ -1,0 +1,52 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.btn {
+  @include btn-base;
+
+  &.fullWidth { width: 100%; }
+
+  .iconStart, .iconEnd {
+    display: flex;
+    align-items: center;
+    svg { width: 16px; height: 16px; }
+  }
+}
+
+// Sizes
+.sm  { padding: $space-2 $space-3; font-size: $font-size-xs; border-radius: $radius-sm; }
+.md  { padding: $space-2 + 0.125rem $space-4; font-size: $font-size-sm; }
+.lg  { padding: $space-3 $space-6; font-size: $font-size-base; }
+
+// Variants
+.primary {
+  background: $primary;
+  color: $white;
+  &:hover:not(:disabled) { background: $primary-dark; transform: translateY(-1px); box-shadow: $shadow-md; }
+  &:active:not(:disabled) { transform: translateY(0); }
+}
+
+.secondary {
+  background: $primary-lighter;
+  color: $primary-dark;
+  &:hover:not(:disabled) { background: $primary-light; transform: translateY(-1px); }
+}
+
+.ghost {
+  background: transparent;
+  color: $gray-600;
+  border: 1px solid $border;
+  &:hover:not(:disabled) { background: $gray-100; color: $gray-700; }
+}
+
+.danger {
+  background: $danger;
+  color: $white;
+  &:hover:not(:disabled) { background: darken(#e07a7a, 10%); transform: translateY(-1px); }
+}
+
+.success {
+  background: $success;
+  color: $white;
+  &:hover:not(:disabled) { background: darken(#7bbf9c, 10%); transform: translateY(-1px); }
+}

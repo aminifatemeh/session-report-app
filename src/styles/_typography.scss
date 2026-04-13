@@ -1,0 +1,47 @@
+// ============================================================
+// TYPOGRAPHY — heading and text utility classes
+// ============================================================
+
+@use 'variables' as *;
+
+// ─────────────────────────────────────────
+// HEADINGS
+// ─────────────────────────────────────────
+
+.h1 { font-size: $text-3xl; font-weight: $font-bold;     line-height: $leading-tight; }
+.h2 { font-size: $text-2xl; font-weight: $font-semibold; line-height: $leading-tight; }
+.h3 { font-size: $text-xl;  font-weight: $font-semibold; line-height: $leading-tight; }
+.h4 { font-size: $text-lg;  font-weight: $font-medium;   line-height: $leading-tight; }
+
+// ─────────────────────────────────────────
+// TEXT UTILITIES
+// ─────────────────────────────────────────
+
+.text-xs   { font-size: $text-xs; }
+.text-sm   { font-size: $text-sm; }
+.text-base { font-size: $text-base; }
+.text-lg   { font-size: $text-lg; }
+.text-xl   { font-size: $text-xl; }
+
+.text-primary   { color: $text-primary; }
+.text-secondary { color: $text-secondary; }
+.text-muted     { color: $text-muted; }
+.text-link      { color: $text-link; }
+.text-success   { color: $color-success; }
+.text-warning   { color: $color-warning; }
+.text-error     { color: $color-error; }
+
+.font-normal   { font-weight: $font-normal; }
+.font-medium   { font-weight: $font-medium; }
+.font-semibold { font-weight: $font-semibold; }
+.font-bold     { font-weight: $font-bold; }
+
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+.text-left   { text-align: left; }
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

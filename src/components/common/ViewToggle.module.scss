@@ -1,0 +1,31 @@
+@use '../../styles/variables' as *;
+
+.toggle {
+  display: flex;
+  background: $gray-100;
+  border-radius: $radius-md;
+  padding: 3px;
+  gap: 2px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: $gray-400;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover { color: $gray-600; }
+
+  &.active {
+    background: $white;
+    color: $primary-dark;
+    box-shadow: $shadow-sm;
+  }
+}

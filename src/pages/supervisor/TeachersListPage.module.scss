@@ -1,0 +1,72 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: $space-4;
+}
+
+.list { display: flex; flex-direction: column; gap: $space-2; }
+
+.card {
+  @include card-base;
+  padding: $space-6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: $space-2;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+    transform: translateY(-3px);
+    border-color: $primary-light;
+  }
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, $primary, $accent);
+  border-radius: $radius-full;
+  @include flex-center;
+  color: $white;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  margin-bottom: $space-2;
+
+  &.avatarSm { width: 40px; height: 40px; font-size: $font-size-base; margin-bottom: 0; }
+}
+
+.name { font-size: $font-size-base; font-weight: $font-weight-semibold; color: $gray-800; }
+.username { font-size: $font-size-xs; color: $gray-500; }
+
+.meta { margin-top: $space-2; }
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+  font-size: $font-size-xs;
+  color: $gray-500;
+}
+
+.listItem {
+  @include card-base;
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  padding: $space-4 $space-5;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover { box-shadow: $shadow-md; border-color: $primary-light; transform: translateX(3px); }
+}
+
+.listInfo { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.listName { font-size: $font-size-base; font-weight: $font-weight-medium; color: $gray-700; }
+.listSub  { font-size: $font-size-xs; color: $gray-500; }
+.listCount { font-size: $font-size-sm; color: $gray-500; white-space: nowrap; }
+.listArrow { color: $gray-400; flex-shrink: 0; }

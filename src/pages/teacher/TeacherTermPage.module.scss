@@ -1,0 +1,59 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.termCard {
+  @include card-base;
+  padding: $space-8;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+.termCardHeader { @include flex-between; }
+.termTitle { font-size: $font-size-2xl; font-weight: $font-weight-bold; color: $gray-800; }
+
+.progressPill {
+  background: $primary-lighter;
+  color: $primary-dark;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.termMeta { display: flex; flex-direction: column; gap: $space-3; }
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  background: $gray-50;
+  border-radius: $radius-md;
+}
+
+.metaIcon  { font-size: $font-size-base; flex-shrink: 0; }
+.metaLabel { font-size: $font-size-sm; color: $gray-500; min-width: 100px; flex-shrink: 0; }
+.metaValue { font-size: $font-size-sm; font-weight: $font-weight-medium; color: $gray-800; }
+.metaLink  {
+  font-size: $font-size-sm; font-weight: $font-weight-medium;
+  color: $primary-dark;
+  &:hover { text-decoration: underline; }
+}
+
+.nextSession {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4;
+  background: $warning-light;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: darken(#e8c97a, 35%);
+  flex-wrap: wrap;
+
+  strong { font-weight: $font-weight-semibold; }
+}
+
+.cardActions { margin-top: $space-2; }

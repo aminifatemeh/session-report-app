@@ -1,0 +1,50 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.formCard {
+  @include card-base;
+  padding: $space-8;
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+  max-width: 780px;
+}
+
+.divider {
+  height: 1px;
+  background: $border;
+  margin: $space-2 0;
+}
+
+.section { display: flex; flex-direction: column; gap: $space-3; }
+.sectionLabel {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $gray-700;
+}
+
+.positiveGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-4;
+
+  @media (max-width: 560px) { grid-template-columns: 1fr; }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $space-3;
+  padding-top: $space-4;
+  border-top: 1px solid $border;
+  flex-wrap: wrap;
+}
+
+.savedMsg {
+  font-size: $font-size-sm;
+  color: $success;
+  font-weight: $font-weight-medium;
+  margin-right: auto;
+  animation: fadeIn 0.2s ease;
+}

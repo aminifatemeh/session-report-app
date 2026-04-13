@@ -1,0 +1,55 @@
+@use '../../styles/variables' as *;
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $gray-700;
+  display: flex;
+  align-items: center;
+  gap: $space-1;
+}
+
+.required { color: $danger; }
+
+.helper { font-size: $font-size-xs; color: $gray-500; line-height: $line-height-relaxed; }
+.error  { font-size: $font-size-xs; color: $danger; }
+
+// Shared input styles (used globally via :global)
+:global(.input) {
+  width: 100%;
+  padding: $space-3 $space-4;
+  border: 1.5px solid $border;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $gray-700;
+  background: $white;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+
+  &::placeholder { color: $gray-400; }
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.12);
+  }
+
+  &:disabled {
+    background: $gray-50;
+    color: $gray-400;
+    cursor: not-allowed;
+  }
+
+  &.error {
+    border-color: $danger;
+    &:focus { box-shadow: 0 0 0 3px rgba($danger, 0.12); }
+  }
+}
+
+:global(textarea.input) { resize: vertical; min-height: 96px; }
+:global(select.input) { cursor: pointer; }

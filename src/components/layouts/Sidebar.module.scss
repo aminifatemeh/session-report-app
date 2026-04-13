@@ -1,0 +1,134 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.sidebar {
+  @include flex-col;
+  width: $sidebar-width;
+  min-height: 100vh;
+  background: $bg-surface;
+  border-right: $border-width solid $border-color;
+  transition: width $transition-base;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+
+  // ─── Collapsed ───
+  &.collapsed {
+    width: $sidebar-width-collapsed;
+
+    .navItem  { justify-content: center; padding: $space-3; }
+    .navLabel { display: none; }
+    .logoText { display: none; }
+    .logo     { justify-content: center; }
+  }
+
+  // ─── Mobile ───
+  @include max-lg {
+    position: fixed;
+    left: -$sidebar-width;
+    top: 0;
+    z-index: $z-modal;
+    box-shadow: $shadow-xl;
+    transition: left $transition-base;
+
+    &.mobileOpen {
+      left: 0;
+    }
+  }
+}
+
+// ─── Logo ───
+.logo {
+  @include flex-start;
+  gap: $space-3;
+  padding: $space-5 $space-5;
+  border-bottom: $border-width solid $border-color;
+  min-height: $header-height;
+}
+
+.logoIcon {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.logoText {
+  font-size: $text-lg;
+  font-weight: $font-bold;
+  color: $text-primary;
+  white-space: nowrap;
+}
+
+// ─── Nav ───
+.nav {
+  @include flex-col;
+  gap: $space-1;
+  padding: $space-4 $space-3;
+  flex: 1;
+}
+
+.navItem {
+  @include flex-start;
+  @include focus-visible;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  border-radius: $radius-md;
+  color: $text-secondary;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  text-decoration: none;
+  transition: all $transition-fast;
+  white-space: nowrap;
+
+  &:hover {
+    background: $bg-surface-hover;
+    color: $text-primary;
+    text-decoration: none;
+  }
+
+  &.active {
+    background: $color-primary-light;
+    color: $color-primary;
+
+    .navIcon svg {
+      stroke: $color-primary;
+    }
+  }
+}
+
+.navIcon {
+  flex-shrink: 0;
+  line-height: 0;
+  display: flex;
+}
+
+.navLabel {
+  flex: 1;
+}
+
+// ─── Bottom ───
+.bottom {
+  padding: $space-3;
+  border-top: $border-width solid $border-color;
+}
+
+.logoutBtn {
+  @include flex-start;
+  @include focus-visible;
+  gap: $space-3;
+  width: 100%;
+  padding: $space-3 $space-4;
+  border: none;
+  border-radius: $radius-md;
+  background: transparent;
+  color: $text-secondary;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: all $transition-fast;
+  white-space: nowrap;
+
+  &:hover {
+    background: $color-error-light;
+    color: $color-error;
+  }
+}

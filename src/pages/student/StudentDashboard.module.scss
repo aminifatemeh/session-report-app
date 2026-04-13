@@ -1,0 +1,282 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+/* ── Profile Card ── */
+.profileCard {
+  @include card-base;
+  display: flex;
+  align-items: center;
+  gap: $space-6;
+  padding: $space-8;
+  margin-bottom: $space-6;
+  background: linear-gradient(135deg, $primary-lighter 0%, $white 100%);
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, $primary, $accent);
+  border-radius: $radius-full;
+  @include flex-center;
+  color: $white;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  flex-shrink: 0;
+  letter-spacing: 0.03em;
+}
+
+.profileInfo { flex: 1; min-width: 0; }
+
+.name {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $gray-800;
+  margin: 0;
+}
+
+.username {
+  font-size: $font-size-sm;
+  color: $gray-500;
+  margin-top: $space-1;
+}
+
+.statsRow {
+  display: flex;
+  gap: $space-6;
+  margin-top: $space-5;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statNum {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $gray-800;
+  line-height: 1.1;
+}
+
+.statDen {
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  color: $gray-400;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: $gray-500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: $font-weight-semibold;
+}
+
+/* ── Current Term Card ── */
+.currentCard {
+  @include card-base;
+  padding: $space-6;
+  margin-bottom: $space-6;
+  border-left: 4px solid $primary;
+}
+
+.currentHeader {
+  @include flex-between;
+  margin-bottom: $space-5;
+  align-items: flex-start;
+}
+
+.currentLabel {
+  font-size: $font-size-xs;
+  color: $gray-400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: $font-weight-semibold;
+  margin-bottom: $space-1;
+}
+
+.currentTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $gray-800;
+  margin: 0;
+}
+
+.currentMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  margin-bottom: $space-5;
+}
+
+.metaChip {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  color: $gray-600;
+  background: $gray-50;
+  border: 1px solid $border;
+  padding: $space-2 $space-3;
+  border-radius: $radius-full;
+}
+
+.metaIcon {
+  color: $primary;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Progress ── */
+.progressWrap {
+  margin-bottom: $space-5;
+}
+
+.progressRow {
+  @include flex-between;
+  margin-bottom: $space-2;
+}
+
+.progressLabel {
+  font-size: $font-size-sm;
+  color: $gray-600;
+  font-weight: $font-weight-medium;
+}
+
+.progressCount {
+  font-size: $font-size-sm;
+  color: $gray-500;
+}
+
+.progressBar {
+  height: 8px;
+  background: $gray-100;
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, $primary, $accent);
+  border-radius: $radius-full;
+  transition: width 0.6s ease;
+}
+
+/* ── View Button ── */
+.viewBtn {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  color: $primary-dark;
+  background: $primary-lighter;
+  border: none;
+  border-radius: $radius-md;
+  padding: $space-3 $space-5;
+  cursor: pointer;
+  transition: background $transition-fast;
+  width: 100%;
+  justify-content: center;
+
+  &:hover {
+    background: $primary-light;
+  }
+}
+
+/* ── All Terms Section ── */
+.termsSection {
+  margin-top: $space-4;
+}
+
+.termsTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $gray-800;
+  margin-bottom: $space-4;
+}
+
+.termsList {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.termRow {
+  @include card-base;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+  padding: $space-4 $space-5;
+  cursor: pointer;
+  transition: all $transition-base;
+  color: $gray-400;
+
+  &:hover {
+    box-shadow: $shadow-md;
+    border-color: $primary-light;
+    transform: translateX(3px);
+  }
+
+  &.termRowCurrent {
+    border-left: 3px solid $primary;
+  }
+}
+
+.termRowLeft {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  flex-wrap: wrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.termRowNum {
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  color: $gray-800;
+  white-space: nowrap;
+}
+
+.termRowDays {
+  font-size: $font-size-xs;
+  color: $gray-400;
+}
+
+.termRowRight {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  flex-shrink: 0;
+}
+
+.termRowPct {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $gray-600;
+  min-width: 32px;
+  text-align: right;
+}
+
+.termRowBar {
+  width: 80px;
+  height: 4px;
+  background: $gray-100;
+  border-radius: $radius-full;
+  overflow: hidden;
+}
+
+.termRowFill {
+  height: 100%;
+  background: linear-gradient(90deg, $primary, $accent);
+  border-radius: $radius-full;
+  transition: width 0.5s ease;
+}
+
+.infoItem { display: flex; flex-direction: column; gap: $space-1; }
+.infoLabel { font-size: $font-size-xs; color: $gray-400; text-transform: uppercase; letter-spacing: 0.06em; font-weight: $font-weight-semibold; }
+.infoValue { font-size: $font-size-sm; color: $gray-700; font-weight: $font-weight-medium; }
+.infoLink  { font-size: $font-size-sm; color: $primary-dark; font-weight: $font-weight-medium; &:hover { text-decoration: underline; } }

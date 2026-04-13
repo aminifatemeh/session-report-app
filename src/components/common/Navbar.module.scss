@@ -1,0 +1,68 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $navbar-height;
+  background: rgba($white, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid $border;
+  z-index: 100;
+}
+
+.inner {
+  @include flex-between;
+  height: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $space-6;
+}
+
+.brand {
+  @include flex-start;
+  gap: $space-3;
+}
+
+.logo {
+  color: $primary-dark;
+  @include flex-center;
+}
+
+.brandName {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $gray-800;
+  letter-spacing: -0.02em;
+}
+
+.right {
+  @include flex-start;
+  gap: $space-4;
+}
+
+.userInfo {
+  @include flex-start;
+  gap: $space-3;
+  display: none;
+  @include md { display: flex; }
+}
+
+.userName {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $gray-700;
+}
+
+.roleBadge {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  padding: 2px $space-3;
+  border-radius: $radius-full;
+
+  &.accent  { background: $accent-light;     color: darken(#9b8ec4, 20%); }
+  &.primary { background: $primary-lighter;  color: $primary-dark; }
+  &.success { background: $success-light;    color: darken(#7bbf9c, 20%); }
+}

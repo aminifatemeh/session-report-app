@@ -1,0 +1,201 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $primary-lighter 0%, $bg 50%, $accent-light 100%);
+  @include flex-center;
+  padding: $space-6;
+}
+
+.card {
+  background: $white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-xl;
+  width: 100%;
+  max-width: 440px;
+  overflow: hidden;
+  animation: scaleIn $transition-slow both;
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.brand {
+  @include flex-center;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-8 $space-8 $space-6;
+  background: linear-gradient(160deg, $primary-lighter, $white);
+  border-bottom: 1px solid $border;
+  text-align: center;
+}
+
+.logoWrap {
+  width: 56px;
+  height: 56px;
+  background: $primary;
+  border-radius: $radius-lg;
+  @include flex-center;
+  color: $white;
+  box-shadow: $shadow-md;
+}
+
+.brandName {
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $gray-800;
+  letter-spacing: -0.03em;
+  margin-top: $space-1;
+}
+
+.brandSub {
+  font-size: $font-size-sm;
+  color: $gray-500;
+}
+
+.form {
+  padding: $space-8;
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+.formTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-semibold;
+  color: $gray-800;
+}
+
+.formSub {
+  font-size: $font-size-sm;
+  color: $gray-500;
+  margin-top: -$space-3;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-1;
+}
+
+.label {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $gray-700;
+}
+
+.passWrap {
+  position: relative;
+
+  input { padding-right: $space-10; }
+}
+
+.passToggle {
+  position: absolute;
+  right: $space-3;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: $gray-400;
+  cursor: pointer;
+  @include flex-center;
+  padding: $space-1;
+  border-radius: $radius-sm;
+  transition: color $transition-fast;
+
+  &:hover { color: $gray-600; }
+}
+
+.errorMsg {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-3 $space-4;
+  background: $danger-light;
+  border: 1px solid rgba($danger, 0.3);
+  border-radius: $radius-md;
+  color: darken(#e07a7a, 20%);
+  font-size: $font-size-sm;
+}
+
+.submitBtn {
+  @include btn-base;
+  width: 100%;
+  padding: $space-3 $space-6;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  background: $primary;
+  color: $white;
+  border-radius: $radius-md;
+  border: none;
+  margin-top: $space-2;
+
+  &:hover:not(:disabled) {
+    background: $primary-dark;
+    transform: translateY(-1px);
+    box-shadow: $shadow-md;
+  }
+  &:disabled { opacity: 0.7; cursor: not-allowed; }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba($white, 0.3);
+  border-top-color: $white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.demo {
+  padding: $space-4 $space-8 $space-6;
+  border-top: 1px solid $border;
+  background: $gray-50;
+}
+
+.demoTitle {
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  color: $gray-400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: $space-3;
+}
+
+.demoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.demoItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-2 $space-3;
+  background: $white;
+  border-radius: $radius-sm;
+  border: 1px solid $border;
+}
+
+.demoRole {
+  font-size: $font-size-xs;
+  color: $gray-500;
+  font-weight: $font-weight-medium;
+}
+
+code {
+  font-family: 'Courier New', monospace;
+  font-size: $font-size-xs;
+  color: $primary-dark;
+  background: $primary-lighter;
+  padding: 2px $space-2;
+  border-radius: $radius-sm;
+}
