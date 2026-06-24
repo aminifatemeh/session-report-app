@@ -76,7 +76,7 @@ src/
 
 ```bash
 # کلون کردن پروژه
-git clone https://github.com/YOUR_USERNAME/session-report-app.git
+git clone https://github.com/aminifatemeh/session-report-app.git
 
 # رفتن به پوشه پروژه
 cd session-report-app
