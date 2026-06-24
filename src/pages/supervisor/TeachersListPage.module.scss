@@ -30,7 +30,7 @@
 .avatar {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, $primary, $accent);
+  background: $primary;
   border-radius: $radius-full;
   @include flex-center;
   color: $white;

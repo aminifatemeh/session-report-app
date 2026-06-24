@@ -130,26 +130,6 @@ export default function LoginPage() {
                     </button>
                 </form>
 
-                {/* Demo credentials helper */}
-                <div className={styles.demo}>
-                    <p className={styles.demoTitle}>Demo credentials</p>
-                    <div className={styles.demoGrid}>
-                        <div className={styles.demoItem}>
-                            <span className={styles.demoRole}>Supervisor</span>
-                            <code>admin / admin123</code>
-                        </div>
-                        <div className={styles.demoItem}>
-                            <span className={styles.demoRole}>Teacher</span>
-                            {/* ✅ */}
-                            <code>sara.ahmadi / pass1234</code>
-                        </div>
-                        <div className={styles.demoItem}>
-                            <span className={styles.demoRole}>Student</span>
-                            {/* ✅ */}
-                            <code>parisa.tehrani / pass1234</code>
-                        </div>
-                    </div>
-                </div>
 
             </div>
         </div>

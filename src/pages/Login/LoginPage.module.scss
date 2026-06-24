@@ -3,7 +3,7 @@
 
 .page {
   min-height: 100vh;
-  background: linear-gradient(135deg, $primary-lighter 0%, $bg 50%, $accent-light 100%);
+  background: $bg;
   @include flex-center;
   padding: $space-6;
 }
@@ -28,7 +28,7 @@
   flex-direction: column;
   gap: $space-2;
   padding: $space-8 $space-8 $space-6;
-  background: linear-gradient(160deg, $primary-lighter, $white);
+  background: $primary-lighter;
   border-bottom: 1px solid $border;
   text-align: center;
 }
@@ -154,42 +154,7 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.demo {
-  padding: $space-4 $space-8 $space-6;
-  border-top: 1px solid $border;
-  background: $gray-50;
-}
 
-.demoTitle {
-  font-size: $font-size-xs;
-  font-weight: $font-weight-semibold;
-  color: $gray-400;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: $space-3;
-}
-
-.demoGrid {
-  display: flex;
-  flex-direction: column;
-  gap: $space-2;
-}
-
-.demoItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: $space-2 $space-3;
-  background: $white;
-  border-radius: $radius-sm;
-  border: 1px solid $border;
-}
-
-.demoRole {
-  font-size: $font-size-xs;
-  color: $gray-500;
-  font-weight: $font-weight-medium;
-}
 
 code {
   font-family: 'Courier New', monospace;

@@ -1,12 +1,12 @@
 import { createContext, useContext, useState, useCallback } from 'react';
-import { login as apiLogin } from '../services/api';
+import { login as apiLogin, clearTokens } from '../services/api';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(() => {
         try {
-            const stored = sessionStorage.getItem('auth_user');
+            const stored = localStorage.getItem('auth_user');
             return stored ? JSON.parse(stored) : null;
         } catch {
             return null;
@@ -16,17 +16,17 @@ export function AuthProvider({ children }) {
     const login = useCallback(async (username, password) => {
         const userData = await apiLogin(username, password);
         setUser(userData);
-        sessionStorage.setItem('auth_user', JSON.stringify(userData));
+        localStorage.setItem('auth_user', JSON.stringify(userData));
         return userData;
     }, []);
 
     const logout = useCallback(() => {
         setUser(null);
-        sessionStorage.removeItem('auth_user');
+        localStorage.removeItem('auth_user');
+        clearTokens();   // remove JWT tokens from localStorage
     }, []);
 
     return (
-        // ✅ role را مستقیم از user.role میخوانیم
         <AuthContext.Provider value={{ user, role: user?.role ?? null, login, logout }}>
             {children}
         </AuthContext.Provider>

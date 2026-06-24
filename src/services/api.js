@@ -1,258 +1,222 @@
-import {
-    supervisor  as _supervisor,
-    teachers    as _teachers,
-    students    as _students,
-    terms       as _terms,
-    sessions    as _sessions,
-} from '../mock/data';
-import { generateSessionDates } from '../utils/dateUtils';
+/* ──────────────────────────────────────────
+   Base config
+────────────────────────────────────────── */
+const BASE_URL = 'http://127.0.0.1:8000/api';
 
 /* ──────────────────────────────────────────
-   In-memory mutable state
-   (survives React re-renders, resets on page refresh)
+   Token helpers
+   Tokens are stored in localStorage so they
+   survive page refresh.
 ────────────────────────────────────────── */
-let supervisorData = { ..._supervisor };
-let teachersData   = _teachers.map(t => ({ ...t }));
-let studentsData   = _students.map(s => ({ ...s }));
-let termsData      = _terms.map(t => ({ ...t }));
-let sessionsData   = _sessions.map(s => ({
-    ...s,
-    report: s.report ? { ...s.report } : null,
-}));
+export function getAccessToken() {
+    return localStorage.getItem('access_token');
+}
+
+function saveTokens(tokens) {
+    localStorage.setItem('access_token', tokens.access);
+    localStorage.setItem('refresh_token', tokens.refresh);
+}
+
+export function clearTokens() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+}
 
 /* ──────────────────────────────────────────
-   Utilities
+   Core fetch wrapper
+   - Attaches the Bearer token automatically
+   - Throws a plain Error with the server's
+     message so components can show it
 ────────────────────────────────────────── */
-const delay = (ms = 120) => new Promise(r => setTimeout(r, ms));
+async function request(path, options = {}) {
+    const token = getAccessToken();
 
-let _idCounter = 1000;
-const genId = (prefix) => `${prefix}-${++_idCounter}`;
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers,
+    };
+
+    const res = await fetch(`${BASE_URL}${path}`, {
+        ...options,
+        headers,
+    });
+
+    // No content (e.g. 204)
+    if (res.status === 204) return null;
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        // Use the server's error message if available
+        const message =
+            data?.error ||
+            data?.detail ||
+            `Request failed with status ${res.status}`;
+        throw new Error(message);
+    }
+
+    return data;
+}
 
 /* ──────────────────────────────────────────
    AUTH
 ────────────────────────────────────────── */
 export async function login(username, password) {
-    await delay();
+    const data = await request('/auth/login/', {
+        method: 'POST',
+        body: JSON.stringify({ username, password }),
+    });
 
-    if (
-        username === supervisorData.username &&
-        password === supervisorData.password
-    ) {
-        return { ...supervisorData };
-    }
+    saveTokens(data.tokens);
 
-    const teacher = teachersData.find(
-        t => t.username === username && t.password === password
-    );
-    if (teacher) return { ...teacher };
-
-    const student = studentsData.find(
-        s => s.username === username && s.password === password
-    );
-    if (student) return { ...student };
-
-    throw new Error('Invalid username or password.');
+    // Return the user object in the same shape the app expects
+    return {
+        id:        data.user.id,
+        username:  data.user.username,
+        firstName: data.user.first_name,
+        lastName:  data.user.last_name,
+        role:      data.user.role,
+        classLink: data.user.class_link,
+    };
 }
 
 /* ──────────────────────────────────────────
    TEACHERS
 ────────────────────────────────────────── */
 export async function getTeachers() {
-    await delay();
-    return teachersData.map(t => ({ ...t }));
+    const data = await request('/teachers/');
+    return data.map(normalizeUser);
 }
 
 export async function getTeacherById(id) {
-    await delay();
-    const t = teachersData.find(t => t.id === id);
-    if (!t) throw new Error(`Teacher ${id} not found`);
-    return { ...t };
+    const data = await request(`/teachers/${id}/`);
+    return normalizeUser(data);
 }
 
-export async function createTeacher(data) {
-    await delay();
-    const teacher = {
-        id:        genId('tch'),
-        role:      'teacher',
-        firstName: data.firstName.trim(),
-        lastName:  data.lastName.trim(),
-        username:  data.username.trim(),
-        password:  data.password,
-        classLink: data.classLink.trim(),
-    };
-    teachersData.push(teacher);
-    return { ...teacher };
+export async function createTeacher(formData) {
+    const data = await request('/teachers/', {
+        method: 'POST',
+        body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName:  formData.lastName,
+            username:  formData.username,
+            password:  formData.password,
+            classLink: formData.classLink,
+        }),
+    });
+    return normalizeUser(data);
 }
 
 export async function getTeacherWithStudents(teacherId) {
-    await delay();
-    const teacher = await getTeacherById(teacherId);
-
-    // All terms taught by this teacher
-    const myTerms = termsData.filter(t => t.teacherId === teacherId);
-
-    // Find current term per student (highest termNumber)
-    const studentMap = {};
-    for (const term of myTerms) {
-        if (
-            !studentMap[term.studentId] ||
-            term.termNumber > studentMap[term.studentId].termNumber
-        ) {
-            studentMap[term.studentId] = term;
-        }
-    }
-
-    const students = await Promise.all(
-        Object.entries(studentMap).map(async ([studentId, currentTerm]) => {
-            const s = await getStudentById(studentId);
-            return { ...s, currentTerm };
-        })
-    );
-
-    return { teacher, students };
+    const data = await request(`/teachers/${teacherId}/with-students/`);
+    return {
+        teacher:  normalizeUser(data.teacher),
+        students: data.students.map(s => ({
+            ...normalizeUser(s),
+            currentTerm: s.currentTerm ? normalizeTerm(s.currentTerm) : null,
+        })),
+    };
 }
 
 /* ──────────────────────────────────────────
    STUDENTS
 ────────────────────────────────────────── */
 export async function getStudents() {
-    await delay();
-    return studentsData.map(s => ({ ...s }));
+    const data = await request('/students/');
+    return data.map(normalizeUser);
 }
 
 export async function getStudentById(id) {
-    await delay();
-    const s = studentsData.find(s => s.id === id);
-    if (!s) throw new Error(`Student ${id} not found`);
-    return { ...s };
+    const data = await request(`/students/${id}/`);
+    return normalizeUser(data);
 }
 
-export async function createStudent(data) {
-    await delay();
-    const student = {
-        id:        genId('std'),
-        role:      'student',
-        firstName: data.firstName.trim(),
-        lastName:  data.lastName.trim(),
-        username:  data.username.trim(),
-        password:  data.password,
-    };
-    studentsData.push(student);
-    return { ...student };
+export async function createStudent(formData) {
+    const data = await request('/students/', {
+        method: 'POST',
+        body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName:  formData.lastName,
+            username:  formData.username,
+            password:  formData.password,
+        }),
+    });
+    return normalizeUser(data);
 }
 
 export async function getStudentDashboard(studentId) {
-    await delay();
-    const student = await getStudentById(studentId);
-    const allTerms = termsData.filter(t => t.studentId === studentId);
-    allTerms.sort((a, b) => a.termNumber - b.termNumber);
-    const currentTerm =
-        allTerms.length > 0 ? { ...allTerms[allTerms.length - 1] } : null;
-    return { student, terms: allTerms.map(t => ({ ...t })), currentTerm };
+    const data = await request(`/students/${studentId}/dashboard/`);
+    return {
+        student:     normalizeUser(data.student),
+        terms:       data.terms.map(normalizeTerm),
+        currentTerm: data.currentTerm ? normalizeTerm(data.currentTerm) : null,
+    };
 }
 
 /* ──────────────────────────────────────────
    TERMS
 ────────────────────────────────────────── */
 export async function getTermsByStudent(studentId) {
-    await delay();
-    return termsData
-        .filter(t => t.studentId === studentId)
-        .map(t => ({ ...t }))
-        .sort((a, b) => a.termNumber - b.termNumber);
+    const data = await request(`/terms/?student=${studentId}`);
+    return data.map(normalizeTerm);
 }
 
 export async function getTermsByTeacher(teacherId) {
-    await delay();
-    return termsData
-        .filter(t => t.teacherId === teacherId)
-        .map(t => ({ ...t }));
+    const data = await request(`/terms/?teacher=${teacherId}`);
+    return data.map(normalizeTerm);
 }
 
 export async function getTermById(id) {
-    await delay();
-    const t = termsData.find(t => t.id === id);
-    if (!t) throw new Error(`Term ${id} not found`);
-    return { ...t };
+    const data = await request(`/terms/${id}/`);
+    return normalizeTerm(data);
 }
 
-export async function createTerm(data) {
-    await delay();
-
-    // Calculate next term number for this student
-    const existing = termsData.filter(t => t.studentId === data.studentId);
-    const termNumber = existing.length + 1;
-
-    const term = {
-        id:          genId('trm'),
-        studentId:   data.studentId,
-        teacherId:   data.teacherId,
-        termNumber,
-        startDate:   data.startDate,   // Gregorian ISO
-        classDays:   data.classDays,
-        classTime:   data.classTime,
-    };
-    termsData.push(term);
-
-    // Auto-generate 12 sessions
-    const dates = generateSessionDates(data.startDate, data.classDays, 12);
-    dates.forEach((date, i) => {
-        sessionsData.push({
-            id:            genId('ses'),
-            termId:        term.id,
-            sessionNumber: i + 1,
-            date,
-            status:        'pending',
-            report:        null,
-        });
+export async function createTerm(formData) {
+    const data = await request('/terms/', {
+        method: 'POST',
+        body: JSON.stringify({
+            studentId: formData.studentId,
+            teacherId: formData.teacherId,
+            startDate: formData.startDate,   // Gregorian ISO
+            classDays: formData.classDays,
+            classTime: formData.classTime,
+        }),
     });
-
-    return { ...term };
+    return normalizeTerm(data);
 }
 
 /* ──────────────────────────────────────────
    SESSIONS
 ────────────────────────────────────────── */
 export async function getSessionsByTerm(termId) {
-    await delay();
-    return sessionsData
-        .filter(s => s.termId === termId)
-        .map(s => ({ ...s, report: s.report ? { ...s.report } : null }))
-        .sort((a, b) => a.sessionNumber - b.sessionNumber);
+    const data = await request(`/sessions/?term=${termId}`);
+    return data.map(normalizeSession);
 }
 
 export async function getSessionById(id) {
-    await delay();
-    const s = sessionsData.find(s => s.id === id);
-    if (!s) throw new Error(`Session ${id} not found`);
-    return { ...s, report: s.report ? { ...s.report } : null };
+    const data = await request(`/sessions/${id}/`);
+    return normalizeSession(data);
 }
 
-/**
- * Save a draft report (status stays 'pending').
- */
 export async function saveReport(sessionId, reportData, submit = false) {
-    await delay();
-    const idx = sessionsData.findIndex(s => s.id === sessionId);
-    if (idx === -1) throw new Error(`Session ${sessionId} not found`);
-
-    sessionsData[idx] = {
-        ...sessionsData[idx],
-        report: { ...reportData },
-        status: submit ? 'reported' : sessionsData[idx].status,
-        // also update the session date if the teacher edited it
-        date: reportData.date ?? sessionsData[idx].date,
-    };
-
-    return {
-        ...sessionsData[idx],
-        report: { ...sessionsData[idx].report },
-    };
+    const data = await request(`/sessions/${sessionId}/report/`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+            date:                 reportData.date,
+            lessonCovered:        reportData.lessonCovered,
+            postClassActivity:    reportData.postClassActivity,
+            summaryOfActivities:  reportData.summaryOfActivities,
+            extraPoints:          reportData.extraPoints,
+            homeworkAssigned:     reportData.homeworkAssigned,
+            positivePoints:       reportData.positivePoints,
+            areasForImprovement:  reportData.areasForImprovement,
+            submit,
+        }),
+    });
+    return normalizeSession(data);
 }
 
-/**
- * Submit a report (status becomes 'reported').
- */
 export async function submitReport(sessionId, reportData) {
     return saveReport(sessionId, reportData, true);
 }
@@ -261,12 +225,61 @@ export async function submitReport(sessionId, reportData) {
    SUPERVISOR DASHBOARD
 ────────────────────────────────────────── */
 export async function getSupervisorDashboard() {
-    await delay();
+    return request('/supervisor/dashboard/');
+}
+
+/* ──────────────────────────────────────────
+   Normalizers
+   The backend uses snake_case; the frontend
+   expects camelCase. These functions convert.
+────────────────────────────────────────── */
+function normalizeUser(u) {
     return {
-        teacherCount: teachersData.length,
-        studentCount: studentsData.length,
-        termCount:    termsData.length,
-        sessionCount: sessionsData.length,
-        reportedCount: sessionsData.filter(s => s.status === 'reported').length,
+        id:        u.id,
+        username:  u.username,
+        firstName: u.first_name,
+        lastName:  u.last_name,
+        fullName:  u.fullName,
+        role:      u.role,
+        classLink: u.class_link,
+    };
+}
+
+function normalizeTerm(t) {
+    return {
+        id:          t.id,
+        studentId:   t.student,
+        teacherId:   t.teacher,
+        teacherName: t.teacher_name,
+        termNumber:  t.term_number,
+        startDate:   t.start_date,
+        classDays:   t.class_days,
+        classTime:   t.class_time,
+        classLink:   t.class_link,
+    };
+}
+
+function normalizeSession(s) {
+    return {
+        id:            s.id,
+        termId:        s.term,
+        sessionNumber: s.session_number,
+        date:          s.date,
+        status:        s.status,
+        report:        s.report ? normalizeReport(s.report) : null,
+    };
+}
+
+function normalizeReport(r) {
+    return {
+        date:                r.date,
+        lessonCovered:       r.lesson_covered,
+        postClassActivity:   r.post_class_activity,
+        summaryOfActivities: r.summary_of_activities,
+        extraPoints:         r.extra_points,
+        homeworkAssigned:    r.homework_assigned,
+        positivePoints:      r.positivePoints,
+        areasForImprovement: r.areas_for_improvement,
+        isSubmitted:         r.is_submitted,
     };
 }
